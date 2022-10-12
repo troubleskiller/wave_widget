@@ -10,8 +10,11 @@ class WaveLoadingPainter extends CustomPainter {
   //画笔对象
   final _paint = Paint();
 
-  //波浪路径
+  //圆形路径
   final Path _circlePath = Path();
+
+  //波浪路径
+  final Path _wavePath = Path();
 
   //要显示的文本
   final String text;
@@ -51,6 +54,23 @@ class WaveLoadingPainter extends CustomPainter {
     _circlePath.reset();
     //构建圆形路径
     _circlePath.addArc(Rect.fromLTWH(0, 0, side, side), 0, 2 * pi);
+
+    double waveWidth = side * 0.8;
+
+    double waveHeight = side / 6;
+
+    _wavePath.reset();
+    //构建波浪线路径
+    _wavePath.moveTo(-waveWidth, radius);
+
+    for (double i = -waveHeight; i < side; i += waveWidth) {
+      _wavePath.relativeQuadraticBezierTo(
+          waveWidth / 4, -waveHeight, waveWidth / 2, 0);
+      _wavePath.relativeQuadraticBezierTo(
+          waveWidth / 4, waveHeight, waveWidth / 2, 0);
+    }
+
+    canvas.drawPath(_wavePath, _paint);
   }
 
   void _drawText({required Canvas canvas, required double side, Color? color}) {
