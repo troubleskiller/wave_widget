@@ -45,7 +45,12 @@ class WaveLoadingPainter extends CustomPainter {
 
     double radius = side / 2.0;
 
+    //文字
     _drawText(canvas: canvas, side: side, color: backgroundColor);
+
+    _circlePath.reset();
+    //构建圆形路径
+    _circlePath.addArc(Rect.fromLTWH(0, 0, side, side), 0, 2 * pi);
   }
 
   void _drawText({required Canvas canvas, required double side, Color? color}) {
