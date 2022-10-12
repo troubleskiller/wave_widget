@@ -28,12 +28,15 @@ class WaveLoadingPainter extends CustomPainter {
 
   final Color? waveColor;
 
+  final double animatedValue;
+
   WaveLoadingPainter(
     this.text,
     this.fontSize,
     this.backgroundColor,
     this.foregroundColor,
     this.waveColor,
+    this.animatedValue,
   ) {
     _paint
       ..isAntiAlias = true
@@ -61,7 +64,7 @@ class WaveLoadingPainter extends CustomPainter {
 
     _wavePath.reset();
     //构建波浪线路径
-    _wavePath.moveTo(-waveWidth, radius);
+    _wavePath.moveTo((animatedValue - 0.7) * waveWidth, radius);
 
     for (double i = -waveHeight; i < side; i += waveWidth) {
       _wavePath.relativeQuadraticBezierTo(
@@ -70,7 +73,18 @@ class WaveLoadingPainter extends CustomPainter {
           waveWidth / 4, waveHeight, waveWidth / 2, 0);
     }
 
-    canvas.drawPath(_wavePath, _paint);
+    // canvas.drawPath(_wavePath, _paint);
+
+    _wavePath.relativeLineTo(0, radius);
+    _wavePath.lineTo(-waveWidth, side);
+    _wavePath.close();
+
+    //取_circlePath和_wavePath的交集
+    var combine = Path.combine(PathOperation.intersect, _circlePath, _wavePath);
+    canvas.drawPath(combine, _paint);
+
+    canvas.clipPath(combine);
+    _drawText(canvas: canvas, side: side, color: foregroundColor);
   }
 
   void _drawText({required Canvas canvas, required double side, Color? color}) {

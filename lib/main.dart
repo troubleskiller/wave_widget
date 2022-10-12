@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:stick_loading_view/animation_widget/wave_loading_widget.dart';
 
 void main() {
   runApp(const MyApp());
@@ -29,14 +30,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,20 +40,19 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
+            Container(
+              height: 200,
+              width: 200,
+              child: WaveLoadingWidget(
+                text: '涔',
+                fontSize: 80,
+                backgroundColor: Colors.lightBlue,
+                foregroundColor: Colors.white,
+                waveColor: Colors.lightBlue,
+              ),
             ),
           ],
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
       ),
     );
   }
