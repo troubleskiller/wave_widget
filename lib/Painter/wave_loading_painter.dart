@@ -1,3 +1,6 @@
+import 'dart:math';
+import 'dart:ui' as ui;
+
 import 'package:flutter/material.dart';
 
 class WaveLoadingPainter extends CustomPainter {
@@ -14,11 +17,11 @@ class WaveLoadingPainter extends CustomPainter {
   final String text;
 
   //字体大小
-  final double fontSize;
+  final double? fontSize;
 
-  final Color backgroundColor;
+  final Color? backgroundColor;
 
-  final Color foregroundColor;
+  final Color? foregroundColor;
 
   final Color? waveColor;
 
@@ -38,7 +41,31 @@ class WaveLoadingPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    // TODO: implement paint
+    double side = min(size.width, size.height);
+
+    double radius = side / 2.0;
+
+    _drawText(canvas: canvas, side: side, color: backgroundColor);
+  }
+
+  void _drawText({required Canvas canvas, required double side, Color? color}) {
+    ui.ParagraphBuilder pb = ui.ParagraphBuilder(ui.ParagraphStyle(
+      textAlign: TextAlign.center,
+      fontWeight: FontWeight.normal,
+      fontSize: fontSize ?? 0,
+    ));
+
+    pb.pushStyle(ui.TextStyle(color: color ?? defaultColor));
+    pb.addText(text);
+    ui.ParagraphConstraints pc = ui.ParagraphConstraints(width: fontSize ?? 0);
+
+    //等价于ui.Paragraph paragraph = pb.build();paragraph.layout(pc);
+    ui.Paragraph paragraph = pb.build()..layout(pc);
+
+    canvas.drawParagraph(
+      paragraph,
+      Offset((side - paragraph.width) / 2.0, (side - paragraph.height) / 2.0),
+    );
   }
 
   @override
